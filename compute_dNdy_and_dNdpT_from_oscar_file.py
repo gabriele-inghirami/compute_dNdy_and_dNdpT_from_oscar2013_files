@@ -196,7 +196,7 @@ if enable_text_outputfile:
     outf.write("# Block 1 - average dN/dy within the pT range: " + '{:5.2f}'.format(pT_min_cut) + " " + '{:5.2f}'.format(pT_max_cut) + " [GeV]\n")
     outf.write("# Columns: (01) rapidity, ")
     for k, v in hadrons.items():
-        outf.write('{:02.d}'.format(v[0] + 1) + sp + k + " (" + v[1] + ")")
+        outf.write('{:02d}'.format(v[0] + 1) + sp + k + " (" + v[1] + ")")
     outf.write("\n")
     for i in range(ny):
         outf.write(cf.format(y_arr[i]))
@@ -206,7 +206,7 @@ if enable_text_outputfile:
     outf.write("# Block 2 - dN/dpT [1/GeV] within the y rapidity range: " + '{:5.2f}'.format(-rap_cut) + " " + '{:5.2f}'.format(rap_cut) + "\n")
     outf.write("# Columns: (01) pT [GeV], ")
     for k, v in hadrons.items():
-        outf.write('{:02.d}'.format(v[0] + 1) + sp + k + " (" + v[1] + ")")
+        outf.write('{:02d}'.format(v[0] + 1) + sp + k + " (" + v[1] + ")")
     outf.write("\n")
     for i in range(npT):
         outf.write(cf.format(pT_arr[i]))
