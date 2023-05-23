@@ -19,7 +19,7 @@
 # -321 Kaon minus
 
 import argparse
-from datetime import date
+from datetime import date, datetime
 import math
 import numpy as np
 import os
@@ -62,18 +62,18 @@ hadrons = {"211":(0,"pion_plus"),\
 parser = argparse.ArgumentParser(description='A scripts that computes dN/dy and dN/dpT of selected hadrons from Oscar 2013 output files')
 
 parser.add_argument('--output', '-o', help='Path to the output file (pickle format). Default is "./output.pickle".', default="./output.pickle")
-parser.add_argument('--text', '-t', help='Path to the output file in txt format (disabled by default).')
+parser.add_argument('--text_output', '-t', help='Path to the output file in txt format (disabled by default).')
 parser.add_argument('inputs', nargs='+', help='Oscar 2013 input files')
 
 args = parser.parse_args()
 
 outputfile = args.output
 
-if (args.text == None):
+if (args.text_output == None):
     enable_text_outputfile = False
 else:
     enable_text_outputfile = True
-    text_outputfile = args.text
+    text_outputfile = args.text_output
 
 nh = len(hadrons)
 
@@ -111,9 +111,9 @@ def extract_data_oscar(infile, y_arr, pT_arr):
         # we count the hadrons event by event and we add them only if the event is complete
         events_in_file = 0 
         y_spectra_event = np.zeros((nh,ny),dtype=np.float64)
-        pT_spectra_event = np.zeros((nh,ny),dtype=np.float64)
+        pT_spectra_event = np.zeros((nh,npT),dtype=np.float64)
         y_spectra_file = np.zeros((nh,ny),dtype=np.float64)
-        pT_spectra_file = np.zeros((nh,ny),dtype=np.float64)
+        pT_spectra_file = np.zeros((nh,npT),dtype=np.float64)
 
         for iline in ifile:
  
@@ -140,10 +140,10 @@ def extract_data_oscar(infile, y_arr, pT_arr):
         
             pdg_ID = line[10]
             if (pdg_ID in hadrons):
-                hadron_index = hadrons[pdg_ID]
+                hadron_index = hadrons[pdg_ID][0]
             else:
                 continue
-            t, x, y, z, mass, p0, px, py, pz = np.float64(line[0:10])
+            t, x, y, z, mass, p0, px, py, pz = np.float64(line[0:9])
         
 
             if (((p0 - pz)*(p0 + pz)) <= 0):
@@ -167,13 +167,13 @@ def extract_data_oscar(infile, y_arr, pT_arr):
     sys.exit(1) """
 
 if os.path.exists(outputfile):
-    current_date = date.now()
-    date_string = current_date.strftime("%Y-%m-%d-%h-%m-%s")
+    current_date = datetime.now()
+    date_string = current_date.strftime("%Y-%m-%d-%H-%M-%S")
     new_name_for_old_outputfile = outputfile + "_backup_copy_" + date_string
     os.rename(outputfile, new_name_for_old_outputfile)
     
 for infile in args.inputs:
-    new_events, new_y_spectra, new_pT_sptectra = extract_data_oscar(infile, y_arr, pT_arr)
+    new_events, new_y_spectra, new_pT_spectra = extract_data_oscar(infile, y_arr, pT_arr)
     if new_events == None:
         print("Warning, error detected when reading " + infile + ", file discarded.")
         continue
@@ -182,7 +182,7 @@ for infile in args.inputs:
         continue
     total_events += new_events
     y_spectra += new_y_spectra
-    pT_spectra += new_pT_sptectra
+    pT_spectra += new_pT_spectra
 
 if total_events == 0:
     print("Sorry, something went wrong, I collected 0 events...")
