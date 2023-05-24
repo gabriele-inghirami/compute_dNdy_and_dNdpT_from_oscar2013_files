@@ -64,8 +64,14 @@ parser = argparse.ArgumentParser(description='A scripts that computes dN/dy and 
 parser.add_argument('--output', '-o', help='Path to the output file (pickle format). Default is "./output.pickle".', default="./output.pickle")
 parser.add_argument('--text_output', '-t', help='Path to the output file in txt format (disabled by default).')
 parser.add_argument('inputs', nargs='+', help='Oscar 2013 input files')
+parser.add_argument("--verbose", '-v', help="increase output verbosity", action="store_true")
 
 args = parser.parse_args()
+
+if args.verbose:
+    verbose = True
+else:
+    verbose = False
 
 outputfile = args.output
 
@@ -100,10 +106,6 @@ cf='{:7.3f}'
 ff='{:16.12e}'
 sp="    "
 
-# if we want to print debugging messages or not (0=none,1=advancement infos)
-verbose = 1
-
-
 def extract_data_oscar(infile, y_arr, pT_arr):
     unfinished_event = False
     with open(infile,"r") as ifile:
@@ -130,6 +132,8 @@ def extract_data_oscar(infile, y_arr, pT_arr):
                             y_spectra_event.fill(0.)
                             pT_spectra_file += pT_spectra_event
                             pT_spectra_event.fill(0)                 
+                            if verbose:
+                                print("Read event in file number: " + str(events_in_file))
                         else:
                             print("Error, detected end of event without detecting its beginning")
                             sys.exit(1)
@@ -138,9 +142,9 @@ def extract_data_oscar(infile, y_arr, pT_arr):
                         sys.exit(1)
                 continue
         
-            pdg_ID = line[10]
+            pdg_ID = line[9]
             if (pdg_ID in hadrons):
-                hadron_index = hadrons[pdg_ID][0]
+                hadron_index = hadrons[pdg_ID][0]                
             else:
                 continue
             t, x, y, z, mass, p0, px, py, pz = np.float64(line[0:9])
@@ -153,7 +157,7 @@ def extract_data_oscar(infile, y_arr, pT_arr):
             rapidity_index = int(math.floor((rapidity - y_arr[0])/dy))
             
             if ((rapidity_index >= 0) and (rapidity_index < ny) and (pT >= pT_min_cut) and (pT < pT_max_cut)):
-                y_spectra_event[hadron_index, rapidity_index] += 1 
+                y_spectra_event[hadron_index, rapidity_index] += 1
 
             pT_index = int(math.floor((pT - pT_arr[0])/dpT))
 
@@ -194,19 +198,20 @@ if enable_text_outputfile:
     outf = open(text_outputfile,"w")
     outf.write("# events: " + str(total_events) + "\n")    
     outf.write("# Block 1 - average dN/dy within the pT range: " + '{:5.2f}'.format(pT_min_cut) + " " + '{:5.2f}'.format(pT_max_cut) + " [GeV]\n")
-    outf.write("# Columns: (01) rapidity, ")
+    outf.write("# Columns: 01: rapidity,  ")
     for k, v in hadrons.items():
-        outf.write('{:02d}'.format(v[0] + 1) + sp + k + " (" + v[1] + ")")
+        outf.write('{:02d}'.format(v[0] + 2) + ": " + k + " (" + v[1] + "),  ")
     outf.write("\n")
     for i in range(ny):
         outf.write(cf.format(y_arr[i]))
         for h in range(nh):
             outf.write(sp + ff.format(y_spectra[h,i]/(dy * total_events)))
         outf.write("\n")
+    outf.write("\n\n") # separation block for gnuplot
     outf.write("# Block 2 - dN/dpT [1/GeV] within the y rapidity range: " + '{:5.2f}'.format(-rap_cut) + " " + '{:5.2f}'.format(rap_cut) + "\n")
-    outf.write("# Columns: (01) pT [GeV], ")
+    outf.write("# Columns: 01: pT [GeV],  ")
     for k, v in hadrons.items():
-        outf.write('{:02d}'.format(v[0] + 1) + sp + k + " (" + v[1] + ")")
+        outf.write('{:02d}'.format(v[0] + 2) + ": " + k + " (" + v[1] + ")")
     outf.write("\n")
     for i in range(npT):
         outf.write(cf.format(pT_arr[i]))
