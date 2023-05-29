@@ -100,11 +100,11 @@ def extract_data_oscar(infile, y_arr, pT_arr):
     with open(infile,"r") as ifile:
 
         # we count the hadrons event by event and we add them only if the event is complete
-        events_in_file = 0 
-        y_spectra_event = np.zeros((nh,ny),dtype=np.float64)
-        pT_spectra_event = np.zeros((nh,npT),dtype=np.float64)
-        y_spectra_file = np.zeros((nh,ny),dtype=np.float64)
-        pT_spectra_file = np.zeros((nh,npT),dtype=np.float64)
+        events_in_file = np.int64(0) 
+        y_spectra_event = np.zeros((nh,ny),dtype=np.int64)
+        pT_spectra_event = np.zeros((nh,npT),dtype=np.int64)
+        y_spectra_file = np.zeros((nh,ny),dtype=np.int64)
+        pT_spectra_file = np.zeros((nh,npT),dtype=np.int64)
 
         for iline in ifile:
  
@@ -118,7 +118,7 @@ def extract_data_oscar(infile, y_arr, pT_arr):
                             unfinished_event = False
                             events_in_file += 1
                             y_spectra_file += y_spectra_event
-                            y_spectra_event.fill(0.)
+                            y_spectra_event.fill(0)
                             pT_spectra_file += pT_spectra_event
                             pT_spectra_event.fill(0)                 
                             if verbose:
@@ -187,7 +187,7 @@ with open(outputfile,"wb") as outf:
     info_results = "The pickled file contains a tuple with:\n"
     info_results += "0 this information string\n"
     info_results += "1 the dictionary of the considered hadrons"
-    info_results += "2 the total number of events\n"
+    info_results += "2 the total number of events (numpy int64)\n"
     info_results += "3 the minimum transverse momentum pT allowed in dN/dy plots\n"
     info_results += "4 the maximum transverse momentum pT allowed in dN/dy plots\n"
     info_results += "5 the maximum absolute value of the rapidity in dN/dpT plots\n"
@@ -195,7 +195,8 @@ with open(outputfile,"wb") as outf:
     info_results += "7 the pT transverse momentum bin array (central points)\n"
     info_results += "8 the y bin width dy\n" 
     info_results += "9 the pT bin width dpT\n" 
-    info_results += "10 the total dN vs dy yields (not averaged by events, not divided by dy)\n"
-    info_results += "11 the total dN vs dpT yields (not averaged by events, not divided by dpT)\n"
+    info_results += "10 the total dN vs dy yields (not averaged by events, not divided by dy) (numpy int 64 array)\n"
+    info_results += "11 the total dN vs dpT yields (not averaged by events, not divided by dpT (numpy int 64 array)\n"
+    info_results += "The 2D arrays have dimensions: number of hadrons and length of rapidity or pT array\n\n"
 
     pickle.dump((info_results, hadrons, total_events, pT_min_cut, pT_max_cut, rap_cut, y_arr, pT_arr, dy, dpT, y_spectra, pT_spectra),outf)
