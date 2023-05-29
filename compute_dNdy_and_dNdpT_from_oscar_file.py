@@ -1,22 +1,16 @@
 #!/usr/bin/python3
 
 # this program reads a Oscar 2013 file and writes in an output pickle file:
+# a short information string about the other contents of the file
+# the python dictionary with the considered hadrons (called hadrons, see later in this source file)
 # number of events
-# the y array
-# the pT array
-# dN(y)
-# dN(dpT)
-# the python dictionary with the considered hadrons
-# for the following hadrons (the first number is the PDG id):
-# 2212 proton
-# -2212 anti-proton
-# 2112 neutron
-# -2212 anti-neutron
-# 211 pion plus
-# -211 pion minus
-# 111 pion 0
-# 321 Kaon plus
-# -321 Kaon minus
+# the minimum transverse momentum pT allowed in dN/dy plots
+# the maximum transverse momentum pT allowed in dN/dy plots
+# the maximum absolute value of the rapidity in dN/dpT plots
+# the y rapidity bin array (central points)
+# the pT transverse momentum bin array (central points)
+# the average dN/dy spectra
+# the average dN/dpT spectra
 
 import argparse
 from datetime import date, datetime
@@ -62,7 +56,6 @@ hadrons = {"211":(0,"pion_plus"),\
 parser = argparse.ArgumentParser(description='A scripts that computes dN/dy and dN/dpT of selected hadrons from Oscar 2013 output files')
 
 parser.add_argument('--output', '-o', help='Path to the output file (pickle format). Default is "./output.pickle".', default="./output.pickle")
-parser.add_argument('--text_output', '-t', help='Path to the output file in txt format (disabled by default).')
 parser.add_argument('inputs', nargs='+', help='Oscar 2013 input files')
 parser.add_argument("--verbose", '-v', help="increase output verbosity", action="store_true")
 
@@ -74,12 +67,6 @@ else:
     verbose = False
 
 outputfile = args.output
-
-if (args.text_output == None):
-    enable_text_outputfile = False
-else:
-    enable_text_outputfile = True
-    text_outputfile = args.text_output
 
 nh = len(hadrons)
 
@@ -194,33 +181,6 @@ if total_events == 0:
     
 # now we print the results
 
-if enable_text_outputfile:
-    outf = open(text_outputfile,"w")
-    outf.write("# events: " + str(total_events) + "\n")    
-    outf.write("# Block 1 - average dN/dy within the pT range: " + '{:5.2f}'.format(pT_min_cut) + " " + '{:5.2f}'.format(pT_max_cut) + " [GeV]\n")
-    outf.write("# Columns: 01: rapidity,  ")
-    for k, v in hadrons.items():
-        outf.write('{:02d}'.format(v[0] + 2) + ": " + k + " (" + v[1] + "),  ")
-    outf.write("\n")
-    for i in range(ny):
-        outf.write(cf.format(y_arr[i]))
-        for h in range(nh):
-            outf.write(sp + ff.format(y_spectra[h,i]/(dy * total_events)))
-        outf.write("\n")
-    outf.write("\n\n") # separation block for gnuplot
-    outf.write("# Block 2 - dN/dpT [1/GeV] within the y rapidity range: " + '{:5.2f}'.format(-rap_cut) + " " + '{:5.2f}'.format(rap_cut) + "\n")
-    outf.write("# Columns: 01: pT [GeV],  ")
-    for k, v in hadrons.items():
-        outf.write('{:02d}'.format(v[0] + 2) + ": " + k + " (" + v[1] + ")")
-    outf.write("\n")
-    for i in range(npT):
-        outf.write(cf.format(pT_arr[i]))
-        for h in range(nh):
-            outf.write(sp + ff.format(pT_spectra[h,i]/(dpT * total_events)))
-        outf.write("\n")
-    
-    outf.close()
-
 with open(outputfile,"wb") as outf:
     info_results = "The pickled file contains a tuple with:\n"
     info_results += "0 this information string\n"
@@ -228,7 +188,7 @@ with open(outputfile,"wb") as outf:
     info_results += "2 the total number of events\n"
     info_results += "3 the minimum transverse momentum pT allowed in dN/dy plots\n"
     info_results += "4 the maximum transverse momentum pT allowed in dN/dy plots\n"
-    info_results += "5 the absolute value of the rapidity in dN/dpT plots\n"
+    info_results += "5 the maximum absolute value of the rapidity in dN/dpT plots\n"
     info_results += "6 the y rapidity bin array (central points)\n"
     info_results += "7 the pT transverse momentum bin array (central points)\n"
     info_results += "8 the average dN/dy spectra\n"
