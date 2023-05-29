@@ -9,6 +9,8 @@
 # the maximum absolute value of the rapidity in dN/dpT plots
 # the y rapidity bin array (central points)
 # the pT transverse momentum bin array (central points)
+# dy (the y bin width)
+# dpT (the pT bin width)
 # the average dN/dy spectra
 # the average dN/dpT spectra
 
@@ -191,7 +193,9 @@ with open(outputfile,"wb") as outf:
     info_results += "5 the maximum absolute value of the rapidity in dN/dpT plots\n"
     info_results += "6 the y rapidity bin array (central points)\n"
     info_results += "7 the pT transverse momentum bin array (central points)\n"
-    info_results += "8 the average dN/dy spectra\n"
-    info_results += "9 the average dN/dpT spectra\n"
+    info_results += "8 the y bin width dy\n" 
+    info_results += "9 the pT bin width dpT\n" 
+    info_results += "10 the total dN vs dy yields (not averaged by events, not divided by dy)\n"
+    info_results += "11 the total dN vs dpT yields (not averaged by events, not divided by dpT)\n"
 
-    pickle.dump((info_results, hadrons, total_events, pT_min_cut, pT_max_cut, rap_cut, y_arr, pT_arr, y_spectra, pT_spectra),outf)
+    pickle.dump((info_results, hadrons, total_events, pT_min_cut, pT_max_cut, rap_cut, y_arr, pT_arr, dy, dpT, y_spectra, pT_spectra),outf)
