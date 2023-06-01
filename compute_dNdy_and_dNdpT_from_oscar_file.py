@@ -33,8 +33,9 @@ pT_max_cut = 1000
 # rapidity resolution (dy)
 rap_resolution = 0.2
 # max rapidity (absolute value), referred to the border of the bin
-# please, notice the the actual used value will be rounded so to have an integer number of cells
-max_rapidity = 5
+# please, notice the the actual used value will be rounded so to have an integer number of cells,
+# with  0 as the midpoint of the central cell
+max_rapidity = 5.1
 
 # pT resolution (dpT)
 pT_resolution = 0.1
@@ -76,13 +77,13 @@ dy = rap_resolution
 
 dpT = pT_resolution
 
-ny = int(2*max_rapidity/dy)
+ny = int(2*max_rapidity/dy) + 1
 
 npT = int(max_pT/pT_resolution)
 
-y_arr = np.linspace(-(ny*dy+dy)/2, (ny*dy+dy)/2, num = ny)
+y_arr = np.linspace(-ny*dy/2 + dy/2, ny*dy/2 - dy/2, num = ny)
 
-pT_arr = np.linspace(0, npT*dpT, num = npT)
+pT_arr = np.linspace(0+dpT/2, npT*dpT-dpT/2, num = npT)
 
 y_spectra = np.zeros((nh,ny),dtype=np.float64)
 

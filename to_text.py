@@ -27,6 +27,10 @@ with open(inputfile,"rb") as infile:
 
 info_results, hadrons, total_events, pT_min_cut, pT_max_cut, rap_cut, y_arr, pT_arr, dy, dpT, y_spectra, pT_spectra = data[:]
 
+ny = len(y_arr)
+npT = len(pT_arr)
+nh = len(hadrons)
+
 with open(outputfile,"w") as outf:
     outf.write("# events: " + str(total_events) + "\n")    
     outf.write("# Block 1 - average dN/dy within the pT range: " + sf.format(pT_min_cut) + " " + sf.format(pT_max_cut) + " [GeV]\n")
@@ -36,7 +40,7 @@ with open(outputfile,"w") as outf:
         outf.write('{:02d}'.format(v[0] + 2) + ": " + k + " (" + v[1] + "),  ")
     outf.write("\n")
     for i in range(ny):
-        outf.write(cf.format(y_arr[i]))
+        outf.write(sf.format(y_arr[i]))
         for h in range(nh):
             outf.write(sp + lf.format(y_spectra[h,i]/(dy * total_events)))
         outf.write("\n")
@@ -48,7 +52,7 @@ with open(outputfile,"w") as outf:
         outf.write('{:02d}'.format(v[0] + 2) + ": " + k + " (" + v[1] + ")")
     outf.write("\n")
     for i in range(npT):
-        outf.write(cf.format(pT_arr[i]))
+        outf.write(sf.format(pT_arr[i]))
         for h in range(nh):
             outf.write(sp + lf.format(pT_spectra[h,i]/(dpT * total_events)))
         outf.write("\n")
