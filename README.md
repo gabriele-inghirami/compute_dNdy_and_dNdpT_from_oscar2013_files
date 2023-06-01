@@ -7,7 +7,7 @@ This repository contains python3 scripts to produce spectra vs rapidity and pT f
 
 ### compute_dNdy_and_dNdpT_from_oscar_file.py
 
-This program reads a Oscar 2013 file and writes in an output pickle file:
+This program reads one or many Oscar 2013 files and writes in an output pickle file:
 
 - a string with a short description of the other contents of the pickle archive
 - the python dictionary of the selected hadrons
@@ -25,7 +25,7 @@ This program reads a Oscar 2013 file and writes in an output pickle file:
 Usage: `python3 compute_dNdy_and_dNdpT_from_oscar_file.py [-h] [--output OUTPUT] [--verbose] inputs [inputs ...]`
 
 positional arguments:
-  inputs                Oscar 2013 input files
+  inputs                Oscar 2013 input files (it can be just one filename path or many, separated by spaces)
 
 options:
   -h, --help            show this help message and exit
