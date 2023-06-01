@@ -156,10 +156,6 @@ def extract_data_oscar(infile, y_arr, pT_arr):
               
     return events_in_file, y_spectra_file, pT_spectra_file
 
-""" if (len(sys.argv)<2):
-    parser.print_help()
-    sys.exit(1) """
-
 if os.path.exists(outputfile):
     current_date = datetime.now()
     date_string = current_date.strftime("%Y-%m-%d-%H-%M-%S")
