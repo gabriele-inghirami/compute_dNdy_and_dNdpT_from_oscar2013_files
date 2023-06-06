@@ -96,8 +96,10 @@ cf='{:7.3f}'
 ff='{:16.12e}'
 sp="    "
 
-def extract_data_oscar(infile, y_arr, pT_arr):
+def extract_data_oscar(infile, y_arr, pT_arr, dy, dpT):
     unfinished_event = False
+    y_start = y_arr[0] - dy/2
+    pT_start = pT_arr[0] - dpT/2
     with open(infile,"r") as ifile:
 
         # we count the hadrons event by event and we add them only if the event is complete
@@ -144,12 +146,12 @@ def extract_data_oscar(infile, y_arr, pT_arr):
                 continue
             rapidity = 0.5 * math.log((p0+pz)/(p0-pz))
             pT = math.sqrt(px**2+py**2)
-            rapidity_index = int(math.floor((rapidity - y_arr[0])/dy))
+            rapidity_index = int(math.floor((rapidity - y_start)/dy))
             
             if ((rapidity_index >= 0) and (rapidity_index < ny) and (pT >= pT_min_cut) and (pT < pT_max_cut)):
                 y_spectra_event[hadron_index, rapidity_index] += 1
 
-            pT_index = int(math.floor((pT - pT_arr[0])/dpT))
+            pT_index = int(math.floor((pT - pT_start)/dpT))
 
             if ((pT_index >= 0) and (pT_index < npT) and (abs(rapidity) < rap_cut)):
                 pT_spectra_event[hadron_index, pT_index] += 1 
@@ -163,7 +165,7 @@ if os.path.exists(outputfile):
     os.rename(outputfile, new_name_for_old_outputfile)
     
 for infile in args.inputs:
-    new_events, new_y_spectra, new_pT_spectra = extract_data_oscar(infile, y_arr, pT_arr)
+    new_events, new_y_spectra, new_pT_spectra = extract_data_oscar(infile, y_arr, pT_arr, dy, dpT)
     if new_events == None:
         print("Warning, error detected when reading " + infile + ", file discarded.")
         continue
