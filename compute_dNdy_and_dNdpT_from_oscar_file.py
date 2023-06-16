@@ -3,7 +3,7 @@
 # this program reads a Oscar 2013 file and writes in an output pickle file:
 # a short information string about the other contents of the file
 # the python dictionary with the considered hadrons (called hadrons, see later in this source file)
-# number of events
+# number of sampling events (please, note that a freeze-out hypersurface can be sampled many times)
 # the minimum transverse momentum pT allowed in dN/dy plots
 # the maximum transverse momentum pT allowed in dN/dy plots
 # the maximum absolute value of the rapidity in dN/dpT plots
@@ -186,7 +186,7 @@ with open(outputfile,"wb") as outf:
     info_results = "The pickled file contains a tuple with:\n"
     info_results += "0 this information string\n"
     info_results += "1 the dictionary of the considered hadrons"
-    info_results += "2 the total number of events (numpy int64)\n"
+    info_results += "2 the total number of sampling events (numpy int64)\n"
     info_results += "3 the minimum transverse momentum pT allowed in dN/dy plots\n"
     info_results += "4 the maximum transverse momentum pT allowed in dN/dy plots\n"
     info_results += "5 the maximum absolute value of the rapidity in dN/dpT plots\n"

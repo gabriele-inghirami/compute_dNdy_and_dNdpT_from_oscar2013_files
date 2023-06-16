@@ -32,7 +32,7 @@ npT = len(pT_arr)
 nh = len(hadrons)
 
 with open(outputfile,"w") as outf:
-    outf.write("# events: " + str(total_events) + "\n")    
+    outf.write("# Total sampling events: " + str(total_events) + "\n")    
     outf.write("# Block 1 - average dN/dy within the pT range: " + sf.format(pT_min_cut) + " " + sf.format(pT_max_cut) + " [GeV]\n")
     outf.write("# dy: " + sf.format(dy) + "\n")
     outf.write("# Columns: 01: rapidity,  ")
