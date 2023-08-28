@@ -20,8 +20,8 @@ This program reads one or many Oscar 2013 files and writes in an output pickle f
 - the pT transverse momentum bin array (central points) (determined by the harcoded parameters max_pT and pT_resolution)
 - the y rapidity bin width dy
 - the pT transverse momentum bin width dpT
-- 3 D array (numpy.int64) with dimensions: (nh, ny, 3) containing: index of hadron and, for each y: dN/dy(y), v1(y), v2(y)
-- 3 D array (numpy.int64) with dimensions: (nh, npT, 3) containing: index of hadron and, for each pT: dN/dpT(pT), v1(pT), v2(pT)
+- 3 D array (numpy.float64) with dimensions: (nh, ny, 3) containing: index of hadron and, for each y: dN/dy(y), v1(y), v2(y)
+- 3 D array (numpy.float64) with dimensions: (nh, npT, 3) containing: index of hadron and, for each pT: dN/dpT(pT), v1(pT), v2(pT)
 
 Usage: `python3 compute_results.py [-h] [--output OUTPUT] [--verbose] inputs [inputs ...]`
 

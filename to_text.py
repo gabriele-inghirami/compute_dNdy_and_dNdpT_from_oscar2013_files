@@ -13,6 +13,11 @@ sp="    "
 sf='{:6.3f}'
 lf='{:7.4e}'
 
+# third indexes of multidimensional arrays with results
+dN_idx = 0
+v1_idx = 1
+v2_idx = 2
+
 N_args=len(sys.argv)
 
 if(N_args!=3):

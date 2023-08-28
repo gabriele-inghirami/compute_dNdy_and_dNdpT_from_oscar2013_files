@@ -97,6 +97,11 @@ cf='{:7.3f}'
 ff='{:16.12e}'
 sp="    "
 
+# third indexes of multidimensional arrays with results
+dN_idx = 0
+v1_idx = 1
+v2_idx = 2
+
 def extract_data_oscar(infile, y_arr, pT_arr, dy, dpT):
     unfinished_event = False
     y_start = y_arr[0] - dy/2
@@ -105,10 +110,10 @@ def extract_data_oscar(infile, y_arr, pT_arr, dy, dpT):
 
         # we count the hadrons event by event and we add them only if the event is complete
         events_in_file = np.int64(0) 
-        y_spectra_event = np.zeros((nh,ny,3),dtype=np.int64)
-        pT_spectra_event = np.zeros((nh,npT,3),dtype=np.int64)
-        y_spectra_file = np.zeros((nh,ny,3),dtype=np.int64)
-        pT_spectra_file = np.zeros((nh,npT,3),dtype=np.int64)
+        y_spectra_event = np.zeros((nh,ny,3),dtype=np.float64)
+        pT_spectra_event = np.zeros((nh,npT,3),dtype=np.float64)
+        y_spectra_file = np.zeros((nh,ny,3),dtype=np.float64)
+        pT_spectra_file = np.zeros((nh,npT,3),dtype=np.float64)
 
         for iline in ifile:
  
@@ -146,16 +151,26 @@ def extract_data_oscar(infile, y_arr, pT_arr, dy, dpT):
             if (((p0 - pz)*(p0 + pz)) <= 0):
                 continue
             rapidity = 0.5 * math.log((p0+pz)/(p0-pz))
-            pT = math.sqrt(px**2+py**2)
+            pT2 = px**2+py**2
+            if (pT2 == 0):
+                continue
+            pT = math.sqrt(pT2)
+            v1 = px / pT
+            v2 = (px**2 - py**2) / pT2
+            
             rapidity_index = int(math.floor((rapidity - y_start)/dy))
             
             if ((rapidity_index >= 0) and (rapidity_index < ny) and (pT >= pT_min_cut) and (pT < pT_max_cut)):
-                y_spectra_event[hadron_index, rapidity_index] += 1
-
+                y_spectra_event[hadron_index, rapidity_index, dN_idx] += 1
+                y_spectra_event[hadron_index, rapidity_index, v1_idc] += v1
+                y_spectra_event[hadron_index, rapidity_index, v2_idx] += v2
+ 
             pT_index = int(math.floor((pT - pT_start)/dpT))
 
             if ((pT_index >= 0) and (pT_index < npT) and (abs(rapidity) < rap_cut)):
-                pT_spectra_event[hadron_index, pT_index] += 1 
+                pT_spectra_event[hadron_index, pT_index, dN_idx] += 1
+                pT_spectra_event[hadron_index, pT_index, v1_idx] += v1
+                pT_spectra_event[hadron_index, pT_index, v1_idx] += v2
               
     return events_in_file, y_spectra_file, pT_spectra_file
 
@@ -195,8 +210,8 @@ with open(outputfile,"wb") as outf:
     info_results += "7 the pT transverse momentum bin array (central points)\n"
     info_results += "8 the y bin width dy\n" 
     info_results += "9 the pT bin width dpT\n" 
-    info_results += "10 the total dN vs dy yields (not averaged by events, not divided by dy) (numpy int 64 array)\n"
-    info_results += "11 the total dN vs dpT yields (not averaged by events, not divided by dpT (numpy int 64 array)\n"
-    info_results += "The 2D arrays have dimensions: number of hadrons and length of rapidity or pT array\n\n"
+    info_results += "10 the total dN vs dy yields (not averaged by events, not divided by dy), v1 and v2 total sum (float 64 array)\n"
+    info_results += "11 the total dN vs dpT yields (not averaged by events, not divided by dpT), v1 and v2 total sum (float 64 array)\n"
+    info_results += "The 3D arrays have dimensions: number of hadrons, length of rapidity or pT array, 3 (dN, v1, v2)\n\n"
 
     pickle.dump((info_results, hadrons, total_events, pT_min_cut, pT_max_cut, rap_cut, y_arr, pT_arr, dy, dpT, y_spectra, pT_spectra),outf)
