@@ -1,28 +1,29 @@
 ## Introduction
-This repository contains python3 scripts to produce spectra vs rapidity and pT from Oscar 2013 files.
+This repository contains python3 scripts to compute spectra and flows (directed and elliptic) vs rapidity and pT from Oscar 2013 files.
 
-- compute_dNdy_and_dNdpT_from_oscar_file.py is the main script that computes dN/dy and dN/dpT for a list of selected hadrons
-- combine_results.py sums up the results of different executions of compute_dNdy_and_dNdpT_from_oscar_file.py
+- compute_results.py is the main script that computes dN/dy(y), v1(y), v2(y), dN/dpT(pT), v1(pT) and v2(pT) for a list of selected hadrons
+- combine_results.py sums up the results of different executions of compute_results.py
 - to_text.py converts the pickle output into human readable text format
 
 ### compute_dNdy_and_dNdpT_from_oscar_file.py
 
 This program reads one or many Oscar 2013 files and writes in an output pickle file:
+(we call the number of selected hadron nh, the number of y bins ny and the number of pT bins npT)
 
 - a string with a short description of the other contents of the pickle archive
 - the python dictionary of the selected hadrons
 - the total number of events (numpy.int64)
-- the minimum transverse momentum pT allowed in dN/dy plots (hardcoded parameter pT_min_cut)
-- the maximum transverse momentum pT allowed in dN/dy plots (hardcoded parameter pT_max_cut)
-- the maximum absolute value of the rapidity in dN/dpT plots (hardcoded parameter rap_cut)
+- the minimum transverse momentum pT allowed in plot data vs y (hardcoded parameter pT_min_cut)
+- the maximum transverse momentum pT allowed in plot data vs y (hardcoded parameter pT_max_cut)
+- the maximum absolute value of the rapidity in plot dat vs pT (hardcoded parameter rap_cut)
 - the y rapidity bin array (central points) (determined by the hardcoded parameters max_rapidity and rap_resolution)
 - the pT transverse momentum bin array (central points) (determined by the harcoded parameters max_pT and pT_resolution)
 - the y rapidity bin width dy
 - the pT transverse momentum bin width dpT
-- the average dN/dy spectra (numpy.int64) dimensions: number of hadrons and of y bins
-- the average dN/dpT spectra (numpy.int64) dimensions: number of hadrons and of pT bins
+- 3 D array (numpy.int64) with dimensions: (nh, ny, 3) containing: index of hadron and, for each y: dN/dy(y), v1(y), v2(y)
+- 3 D array (numpy.int64) with dimensions: (nh, npT, 3) containing: index of hadron and, for each pT: dN/dpT(pT), v1(pT), v2(pT)
 
-Usage: `python3 compute_dNdy_and_dNdpT_from_oscar_file.py [-h] [--output OUTPUT] [--verbose] inputs [inputs ...]`
+Usage: `python3 compute_results.py [-h] [--output OUTPUT] [--verbose] inputs [inputs ...]`
 
 positional arguments:
   inputs                Oscar 2013 input files (it can be just one filename path or many, separated by spaces)
@@ -35,7 +36,7 @@ options:
 
 ### combine_results.py
 
-This program combines the results of several output pickle files produced by compute_dNdy_and_dNdpT_from_oscar_file.py
+This program combines the results of several output pickle files produced by compute_results.py
 
 Usage: `python3 combine_results.py <outputfile> <inputfile 1> <inputfile 2> ... [inputfile n]`
 

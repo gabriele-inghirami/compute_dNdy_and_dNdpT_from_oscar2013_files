@@ -4,15 +4,16 @@
 # a short information string about the other contents of the file
 # the python dictionary with the considered hadrons (called hadrons, see later in this source file)
 # number of sampling events (please, note that a freeze-out hypersurface can be sampled many times)
-# the minimum transverse momentum pT allowed in dN/dy plots
-# the maximum transverse momentum pT allowed in dN/dy plots
-# the maximum absolute value of the rapidity in dN/dpT plots
+# the minimum transverse momentum pT allowed in dN/dy(y), v1(y) and v2(y) plots
+# the maximum transverse momentum pT allowed in dN/dy(y), v1(y) and v2(y) plots
+# the maximum absolute value of the rapidity in dN/dpT(pT), v1(pT) and v2(pT) plots
 # the y rapidity bin array (central points)
 # the pT transverse momentum bin array (central points)
 # dy (the y bin width)
 # dpT (the pT bin width)
-# the average dN/dy spectra
-# the average dN/dpT spectra
+# a 3D array with: hadron index, y, third index: average dN/dy(y) spectra, average v1(y), average v2(y)
+# a 3D array with: hadron index, pT, third index: average dN/dpT(pT) spectra, average v1(pT), average v2(pT)
+# The indexes of the hadrons are specified in the hadron dictionary, see the source file below.
 
 import argparse
 from datetime import date, datetime
@@ -85,9 +86,9 @@ y_arr = np.linspace(-ny*dy/2 + dy/2, ny*dy/2 - dy/2, num = ny)
 
 pT_arr = np.linspace(0+dpT/2, npT*dpT-dpT/2, num = npT)
 
-y_spectra = np.zeros((nh,ny),dtype=np.float64)
+y_spectra = np.zeros((nh,ny,3),dtype=np.float64)
 
-pT_spectra = np.zeros((nh,npT),dtype=np.float64)
+pT_spectra = np.zeros((nh,npT,3),dtype=np.float64)
 
 total_events = 0
 
@@ -104,10 +105,10 @@ def extract_data_oscar(infile, y_arr, pT_arr, dy, dpT):
 
         # we count the hadrons event by event and we add them only if the event is complete
         events_in_file = np.int64(0) 
-        y_spectra_event = np.zeros((nh,ny),dtype=np.int64)
-        pT_spectra_event = np.zeros((nh,npT),dtype=np.int64)
-        y_spectra_file = np.zeros((nh,ny),dtype=np.int64)
-        pT_spectra_file = np.zeros((nh,npT),dtype=np.int64)
+        y_spectra_event = np.zeros((nh,ny,3),dtype=np.int64)
+        pT_spectra_event = np.zeros((nh,npT,3),dtype=np.int64)
+        y_spectra_file = np.zeros((nh,ny,3),dtype=np.int64)
+        pT_spectra_file = np.zeros((nh,npT,3),dtype=np.int64)
 
         for iline in ifile:
  
