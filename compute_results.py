@@ -170,7 +170,7 @@ def extract_data_oscar(infile, y_arr, pT_arr, dy, dpT):
             if ((pT_index >= 0) and (pT_index < npT) and (abs(rapidity) < rap_cut)):
                 pT_spectra_event[hadron_index, pT_index, dN_idx] += 1
                 pT_spectra_event[hadron_index, pT_index, v1_idx] += v1
-                pT_spectra_event[hadron_index, pT_index, v1_idx] += v2
+                pT_spectra_event[hadron_index, pT_index, v2_idx] += v2
               
     return events_in_file, y_spectra_file, pT_spectra_file
 
