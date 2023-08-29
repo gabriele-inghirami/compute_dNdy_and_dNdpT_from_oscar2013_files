@@ -50,10 +50,10 @@ for k, v in hadrons.items():
         for i in range(ny):
             outf.write(sf.format(y_arr[i]))
             N_in_bin = y_spectra[h_index,i,dN_idx]
-            outf.write(sp + lf.format(N_hadrons / (dy * total_events)))
+            outf.write(sp + lf.format(N_in_bin / (dy * total_events)))
             if (N_in_bin > 0):
-                v1_in_bin = y_spectra[h_index,i,dN_v1] / N_hadrons
-                v2_in_bin = y_spectra[h_index,i,dN_v2] / N_hadrons
+                v1_in_bin = y_spectra[h_index,i,v1_idx] / N_in_bin
+                v2_in_bin = y_spectra[h_index,i,v2_idx] / N_in_bin
             else:
                 v1_in_bin = 0
                 v2_in_bin = 0
@@ -72,10 +72,10 @@ for k, v in hadrons.items():
         for i in range(npT):
             outf.write(sf.format(pT_arr[i]))
             N_in_bin = pT_spectra[h_index,i,dN_idx]
-            outf.write(sp + lf.format(N_hadrons / (dpT * total_events)))
+            outf.write(sp + lf.format(N_in_bin / (dpT * total_events)))
             if (N_in_bin > 0):
-                v1_in_bin = pT_spectra[h_index,i,dN_v1] / N_hadrons
-                v2_in_bin = pT_spectra[h_index,i,dN_v2] / N_hadrons
+                v1_in_bin = pT_spectra[h_index,i,v1_idx] / N_in_bin
+                v2_in_bin = pT_spectra[h_index,i, v2_idx] / N_in_bin
             else:
                 v1_in_bin = 0
                 v2_in_bin = 0
