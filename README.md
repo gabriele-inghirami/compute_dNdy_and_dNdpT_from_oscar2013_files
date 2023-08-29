@@ -4,6 +4,7 @@ This repository contains python3 scripts to compute spectra and flows (directed 
 - compute_results.py is the main script that computes dN/dy(y), v1(y), v2(y), dN/dpT(pT), v1(pT) and v2(pT) for a list of selected hadrons
 - combine_results.py sums up the results of different executions of compute_results.py
 - to_text.py converts the pickle output into human readable text format
+- make_plots.gp is a gnuplot script (tested with version 5.4) that makes (eps) plots of the data exported in text format
 
 ### compute_dNdy_and_dNdpT_from_oscar_file.py
 
@@ -49,3 +50,15 @@ This program converts the pickle output into human readable text format.
 Usage: `python3 to_text.py <input file in pickle format> <output file in text format>`
 
 Warning: if there is already a file named as the output file, it is simply overwritten without any check!
+
+### make_plots.gp
+
+This gnuplot scripts makes plots in eps format of the data exported in human readable text format.
+
+Usage: `gnuplot make_plots.gp`
+
+The script must be launched in the same directory where are the data (one can copy it or make a symbolic link).
+
+The plots can be converted from eps to pdf format with:
+
+`for i in *.eps; do ps2pdf -dEPSCrop $i; done`
