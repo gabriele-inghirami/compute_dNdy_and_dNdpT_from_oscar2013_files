@@ -151,7 +151,7 @@ def extract_data_oscar(infile, y_arr, pT_arr, dy, dpT):
             if (((p0 - pz)*(p0 + pz)) <= 0):
                 continue
             rapidity = 0.5 * math.log((p0+pz)/(p0-pz))
-            pT2 = px**2+py**2
+            pT2 = px**2 + py**2
             if (pT2 == 0):
                 continue
             pT = math.sqrt(pT2)

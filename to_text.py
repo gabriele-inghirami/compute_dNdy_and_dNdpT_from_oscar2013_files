@@ -75,7 +75,7 @@ for k, v in hadrons.items():
             outf.write(sp + lf.format(N_in_bin / (dpT * total_events)))
             if (N_in_bin > 0):
                 v1_in_bin = pT_spectra[h_index,i,v1_idx] / N_in_bin
-                v2_in_bin = pT_spectra[h_index,i, v2_idx] / N_in_bin
+                v2_in_bin = pT_spectra[h_index,i,v2_idx] / N_in_bin
             else:
                 v1_in_bin = 0
                 v2_in_bin = 0
