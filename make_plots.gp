@@ -76,6 +76,17 @@ do for [i=1:words(had_names)] {
   unset logscale y
   set format y
 
+  set out "dNdpT_over_pT_vs_pT_".word(had_names,i)."_logscale".ending
+  set logscale y
+  set autoscale x
+  set yrange [STATS_min:STATS_max*1.2]
+  set xrange [0:4]
+  set ylabel "1/p_T dN/dpT [GeV^{-1}]"
+  set format y "10^{%L}"
+  plot common_name.word(had_names,i)."_vs_pT.dat" u 1:(($2)/($1)) w l ls 1 t ""
+  unset logscale y
+  set format y
+
   # we do not print v1 vs pT because usually it is not very interesting
 
   set autoscale y
