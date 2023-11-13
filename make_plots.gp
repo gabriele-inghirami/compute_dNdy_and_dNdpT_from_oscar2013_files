@@ -3,7 +3,11 @@
 set term pos eps col enh font "Helvetica, 18"
 ending=".eps" # please, change it if you change terminal type
 
-common_name="AuAu_1000_events_b_10_"
+# path of the input directory
+indir="./"
+# common initial name of the output files (with prepended path)
+common_name=indir."AuAu_1000_events_b_10_"
+# path of the output directory
 outdir="./"
 
 set style line 1 dt 1 lc "navy" lw 4
