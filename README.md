@@ -5,6 +5,7 @@ This repository contains python3 scripts to compute spectra and flows (directed 
 - combine_results.py sums up the results of different executions of compute_results.py
 - to_text.py converts the pickle output into human readable text format
 - make_plots.gp is a gnuplot script (tested with version 5.4) that makes (eps) plots of the data exported in text format
+- make_comparison_plots.gp is a gnuplot script (tested with version 5.4) that makes (eps) comparison plots of two sets of data exported in text format
 
 ### compute_dNdy_and_dNdpT_from_oscar_file.py
 
@@ -51,13 +52,13 @@ Usage: `python3 to_text.py <input file in pickle format> <output file in text fo
 
 Warning: if there is already a file named as the output file, it is simply overwritten without any check!
 
-### make_plots.gp
+### make_plots.gp and make_comparison_plots.gp
 
-This gnuplot scripts makes plots in eps format of the data exported in human readable text format.
+These gnuplot scripts make plots in eps format of the data exported in human readable text format.
 
-Usage: `gnuplot make_plots.gp`
+Usage: `gnuplot make_plots.gp` or `gnuplot make_comparison_plots.gp`
 
-The script must be launched in the same directory where are the data (one can copy it or make a symbolic link).
+By editing the scripts one can choose were to pick up the data and save the plots.
 
 The plots can be converted from eps to pdf format with:
 
