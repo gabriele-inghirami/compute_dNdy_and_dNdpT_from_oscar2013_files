@@ -3,7 +3,8 @@
 set term pos eps col enh font "Helvetica, 18"
 ending=".eps" # please, change it if you change terminal type
 
-common_name="test_AuAu_1000_events_"
+common_name="AuAu_1000_events_b_10_"
+outdir="./"
 
 set style line 1 dt 1 lc "navy" lw 4
 
@@ -30,7 +31,7 @@ do for [i=1:words(had_names)] {
   # this is to avoid issues with the stat commands
   set autoscale y
   set autoscale x
-  set out "dNdy_vs_rapidity_".word(had_names,i).ending
+  set out outdir."dNdy_vs_rapidity_".word(had_names,i).ending
   set ylabel "dN/dy"
   stat common_name.word(had_names,i)."_vs_rapidity.dat" u 2 nooutput
   set yrange [0:STATS_max*1.05]
@@ -39,7 +40,7 @@ do for [i=1:words(had_names)] {
 
   set autoscale y
   set autoscale x
-  set out "v1_vs_rapidity_".word(had_names,i).ending
+  set out outdir."v1_vs_rapidity_".word(had_names,i).ending
   set ylabel "v_1"
   stat common_name.word(had_names,i)."_vs_rapidity.dat" u 3 nooutput
   set yrange [STATS_min*1.05:STATS_max*1.05]
@@ -48,7 +49,7 @@ do for [i=1:words(had_names)] {
 
   set autoscale y
   set autoscale x
-  set out "v2_vs_rapidity_".word(had_names,i).ending
+  set out outdir."v2_vs_rapidity_".word(had_names,i).ending
   set ylabel "v_2"
   stat common_name.word(had_names,i)."_vs_rapidity.dat" u 4 nooutput
   set yrange [STATS_min*1.05:STATS_max*1.05]
@@ -59,14 +60,14 @@ do for [i=1:words(had_names)] {
 
   set autoscale y
   set autoscale x
-  set out "dNdpT_vs_pT_".word(had_names,i).ending
+  set out outdir."dNdpT_vs_pT_".word(had_names,i).ending
   set ylabel "dN/dpT [GeV^{-1}]"
   stat common_name.word(had_names,i)."_vs_pT.dat" u 2 nooutput
   set yrange [0:STATS_max*1.05]
   set xrange [0:4]
   plot common_name.word(had_names,i)."_vs_pT.dat" u 1:2 w l ls 1 t ""
 
-  set out "dNdpT_vs_pT_".word(had_names,i)."_logscale".ending
+  set out outdir."dNdpT_vs_pT_".word(had_names,i)."_logscale".ending
   set logscale y
   set autoscale x
   set yrange [STATS_min:STATS_max*1.2]
@@ -76,7 +77,7 @@ do for [i=1:words(had_names)] {
   unset logscale y
   set format y
 
-  set out "dNdpT_over_pT_vs_pT_".word(had_names,i)."_logscale".ending
+  set out outdir."dNdpT_over_pT_vs_pT_".word(had_names,i)."_logscale".ending
   set logscale y
   set autoscale x
   set autoscale y
@@ -93,7 +94,7 @@ do for [i=1:words(had_names)] {
 
   set autoscale y
   set autoscale x
-  set out "v2_vs_pT_".word(had_names,i).ending
+  set out outdir."v2_vs_pT_".word(had_names,i).ending
   set ylabel "v_2"
   stat common_name.word(had_names,i)."_vs_pT.dat" u 4 nooutput
   set yrange [STATS_min*1.05:STATS_max*1.05]
