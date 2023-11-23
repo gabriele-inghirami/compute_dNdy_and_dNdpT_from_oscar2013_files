@@ -75,10 +75,16 @@ if (args.type == "SMASH"):
     pdg_idx = 9
     mom_start = 5
     mom_end =  mom_start + 4
+    event_name_identifier = "event"
+    event_start_identifier = "out"
+    event_end_identifier = "end"
 elif (args.type == "BHAC-QGP"):
     pdg_idx = 8
     mom_start = 4
     mom_end = mom_start + 4
+    event_name_identifier = "Event"
+    event_start_identifier = "start"
+    event_end_identifier = "end"
 else:
     print("Oscar format type unknown. It can be either SMASH or BHAC-QGP.")
     sys.exit(1)
@@ -132,10 +138,10 @@ def extract_data_oscar(infile, y_arr, pT_arr, dy, dpT):
  
             line = iline.split()
             if (line[0][0] == "#"):
-                if (line[1] == "event"):
-                    if (line[3] == "out"):
+                if (line[1] == event_name_identifier):
+                    if (line[3] == event_start_identifier):
                         unfinished_event = True
-                    elif (line[3] == "end"):
+                    elif (line[3] == event_end_identifier):
                         if unfinished_event:
                             unfinished_event = False
                             events_in_file += 1
