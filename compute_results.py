@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-# this program reads a Oscar 2013 file and writes in an output pickle file:
+# this program reads a Oscar 2013 file (either from the SMASH or BHAC-QGP output) and writes in an output pickle file:
 # a short information string about the other contents of the file
 # the python dictionary with the considered hadrons (called hadrons, see later in this source file)
 # number of sampling events (please, note that a freeze-out hypersurface can be sampled many times)
@@ -60,6 +60,7 @@ hadrons = {"211":(0,"pion_plus"),\
 parser = argparse.ArgumentParser(description='A scripts that computes dN/dy and dN/dpT of selected hadrons from Oscar 2013 output files')
 
 parser.add_argument('--output', '-o', help='Path to the output file (pickle format). Default is "./output.pickle".', default="./output.pickle")
+parser.add_argument('--type', '-t', help='Oscar format type: "SMASH" or "BHAC-QGP". Default is "SMASH",', default="SMASH")
 parser.add_argument('inputs', nargs='+', help='Oscar 2013 input files')
 parser.add_argument("--verbose", '-v', help="increase output verbosity", action="store_true")
 
@@ -69,6 +70,18 @@ if args.verbose:
     verbose = True
 else:
     verbose = False
+
+if (args.type == "SMASH"):
+    pdg_idx = 9
+    mom_start = 5
+    mom_end =  mom_start + 4
+elif (args.type == "BHAC-QGP"):
+    pdg_idx = 8
+    mom_start = 4
+    mom_end = mom_start + 4
+else:
+    print("Oscar format type unknown. It can be either SMASH or BHAC-QGP.")
+    sys.exit(1)
 
 outputfile = args.output
 
@@ -140,13 +153,13 @@ def extract_data_oscar(infile, y_arr, pT_arr, dy, dpT):
                         sys.exit(1)
                 continue
         
-            pdg_ID = line[9]
+            pdg_ID = line[pdg_idx]
             if (pdg_ID in hadrons):
                 hadron_index = hadrons[pdg_ID][0]                
             else:
                 continue
-            t, x, y, z, mass, p0, px, py, pz = np.float64(line[0:9])
-        
+            t, x, y, z = np.float64(line[0:4])
+            p0, px, py, pz = np.float64(line[mom_start:mom_end])
 
             if (((p0 - pz)*(p0 + pz)) <= 0):
                 continue
